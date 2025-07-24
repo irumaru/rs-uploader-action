@@ -24,8 +24,8 @@ runs:
   using: "composite"
   steps:
     - name: "Content Compression"
-      run: tar -zcvf /tmp/content.tar.gz -C {inputs.target-directory} .
+      run: tar -zcvf /tmp/content.tar.gz -C ${{ inputs.target-directory }} .
       shell: bash
     - name: "Deploy to RS"
-      run: curl -v -X POST -F "{inputs.secret-key}" -F "u={inputs.user-id}" -F "file=@/tmp/content.tar.gz" {inputs.server-url}
+      run: curl -v -X POST -F "k=${{ inputs.secret-key }}" -F "u=${{ inputs.user-id }}" -F "file=@/tmp/content.tar.gz" ${{ inputs.server-url }}
       shell: bash
