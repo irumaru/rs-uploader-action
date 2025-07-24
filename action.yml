@@ -1,0 +1,31 @@
+name: "rs-uploader-action"
+description: "Action to deploy static files to the rental server."
+
+inputs:
+  server-url:
+    description: "Server URL"
+    required: true
+  user-id:
+    description: "User ID"
+    required: true
+  secret-key:
+    description: "Secret Key"
+    required: true
+  target-directory:
+    description: "Upload target directory"
+    required: true
+
+outputs:
+  test:
+    description: "outputsのテストです"
+    value: "test"
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Content Compression"
+      run: tar -zcvf /tmp/content.tar.gz -C {inputs.target-directory} .
+      shell: bash
+    - name: "Deploy to RS"
+      run: curl -v -X POST -F "{inputs.secret-key}" -F "u={inputs.user-id}" -F "file=@/tmp/content.tar.gz" {inputs.server-url}
+      shell: bash
